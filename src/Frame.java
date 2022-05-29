@@ -7,7 +7,7 @@ public class Frame extends JFrame {
     private LetterBox[][] boxes;
     private final JPanel grid;
 
-    private final int WIDTH = 500;
+    private final static int WIDTH = 500;
 
     public Frame() {
         setTitle("WORDLE");
@@ -22,9 +22,6 @@ public class Frame extends JFrame {
 
         // sets background size and background colors of all containers
         gridContainer.setBackground(GameTheme.BACKGROUND); // TODO: add message label inside of gridContainer below grid JPanel
-        gridContainer.setPreferredSize(new Dimension(WIDTH - 150, 500));
-        gridContainer.setMaximumSize(new Dimension(WIDTH - 150, 500));
-        gridContainer.setLayout(new BorderLayout(10, 0));
 
         optionsContainer.setBackground(GameTheme.BACKGROUND);
         optionsContainer.setPreferredSize(new Dimension(WIDTH, 100));
@@ -34,28 +31,34 @@ public class Frame extends JFrame {
         grid.setLayout(new GridLayout(6, 5, 5, 5));
 
         grid.setPreferredSize(new Dimension(WIDTH - 150, 400));
-        grid.setMaximumSize(new Dimension(WIDTH - 150, 400));
+        // grid.setMaximumSize(new Dimension(WIDTH - 150, 400)); // !!! ? del
 
         grid.setBackground(GameTheme.BACKGROUND);
         createBoxes();
 
-        // JLabel for messages
-        JLabel alertLabel = new JLabel("test");
-        alertLabel.setOpaque(true);
-        alertLabel.setForeground(GameTheme.WHITE);
-        alertLabel.setBackground(GameTheme.BACKGROUND);
+        JButton playBtn = createButton("RESET");
+        JButton scoresBtn = createButton("STATS");
+
+        Game game = new Game(boxes, playBtn);
+        // Scores scores = new Scores();
+
+        // attaches action listener to play button that will call reset method in Game class
+        playBtn.addActionListener(e -> game.reset());
+        scoresBtn.addActionListener(e -> new Stats());
 
         // listens for presses in the JFrame, with the Game class implementing the method for the keypress event
-        addKeyListener(new Game(boxes));
+        addKeyListener(game);
 
         // lays out all containers and their sub-containers
         // title label at top, grid container at center, options container at bottom
         mainContainer.setLayout(new BorderLayout());
-        mainContainer.add(createTitle(), BorderLayout.NORTH);
+        mainContainer.add(createTitle("WORDLE", 36), BorderLayout.NORTH);
         mainContainer.add(gridContainer, BorderLayout.CENTER);
         mainContainer.add(optionsContainer, BorderLayout.SOUTH);
-        gridContainer.add(grid, BorderLayout.NORTH);
-        gridContainer.add(alertLabel, BorderLayout.SOUTH);
+        gridContainer.add(grid);
+        // optionsContainer.add(Box.createRigidArea(new Dimension(0, 15)));
+        optionsContainer.add(playBtn);
+        optionsContainer.add(scoresBtn);
 
         // boilerplate frame configuration
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -65,12 +68,12 @@ public class Frame extends JFrame {
         setVisible(true);
     }
 
-    public JLabel createTitle() {
+    public static JLabel createTitle(String text, int fontSize) {
         // creates title label with text
-        JLabel titleLabel = new JLabel("WORDLE");
+        JLabel titleLabel = new JLabel(text);
 
         // sets size of JLabel
-        titleLabel.setPreferredSize(new Dimension(WIDTH, 80));
+        titleLabel.setPreferredSize(new Dimension(WIDTH, 60));
 
         // centers title within container horizontally and vertically
         titleLabel.setHorizontalAlignment(JLabel.CENTER);
@@ -80,9 +83,22 @@ public class Frame extends JFrame {
         titleLabel.setOpaque(true);
         titleLabel.setForeground(GameTheme.WHITE);
         titleLabel.setBackground(GameTheme.BACKGROUND);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 36));
+        titleLabel.setFont(new Font("Arial", Font.BOLD, fontSize));
 
         return titleLabel;
+    }
+
+    public static JButton createButton(String btnText) {
+        JButton btn = new JButton(btnText);
+
+        btn.setOpaque(true);
+        btn.setForeground(GameTheme.WHITE);
+        btn.setBackground(GameTheme.LIGHT_GREY);
+        btn.setBorderPainted(false);
+        btn.setFocusable(false);
+        btn.setFont(new Font("Arial", Font.BOLD, 16));
+
+        return btn;
     }
 
     public void createBoxes() {
@@ -92,7 +108,7 @@ public class Frame extends JFrame {
         // populates 2d array and adds boxes to the grid container
         for (int r = 0; r < 6; r++) {
             for (int c = 0; c < 5; c++) {
-                LetterBox letterBox = new LetterBox(r, c);
+                LetterBox letterBox = new LetterBox();
                 boxes[r][c] = letterBox;
                 grid.add(letterBox.getBox());
             }

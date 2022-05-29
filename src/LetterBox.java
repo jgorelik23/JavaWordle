@@ -3,16 +3,11 @@ import javax.swing.*;
 import java.awt.*;
 
 public class LetterBox {
-    private final int row;
-    private final int col;
     private String letter;
     private LetterStatus status;
     private final JLabel box;
 
-    public LetterBox(int row, int col) {
-        this.row = row; // ? del
-        this.col = col; // ? del
-
+    public LetterBox() {
         this.letter = "";
         this.status = LetterStatus.none;
         box = new JLabel();
@@ -25,7 +20,6 @@ public class LetterBox {
         box.setHorizontalAlignment(SwingConstants.CENTER);
         box.setVerticalAlignment(SwingConstants.CENTER);
         box.setFont(new Font("Arial", Font.BOLD, 24));
-
         setDefaultStyles();
     }
 
@@ -35,14 +29,6 @@ public class LetterBox {
         box.setBackground(GameTheme.BACKGROUND);
         box.setBorder(GameTheme.DEFAULT_BORDER);
         box.setForeground(GameTheme.WHITE);
-    }
-
-    public int getRow() {
-        return this.row;
-    }
-
-    public int getCol() {
-        return this.col;
     }
 
     public String getLetter() {
@@ -64,7 +50,7 @@ public class LetterBox {
         this.status = status;
 
         // updates background color of letter based on if letter is correct, present, or absent
-        switch (status) {
+        switch (getStatus()) {
             case correct -> {
                 getBox().setBackground(GameTheme.CORRECT_GREEN);
                 getBox().setBorder(GameTheme.GREEN_BORDER);
@@ -89,18 +75,3 @@ public class LetterBox {
         return "Letter: " + this.letter;
     }
 }
-
-/*
-
-        // box styling
-//        box.setOpaque(true);
-//        box.setForeground(GameTheme.WHITE);
-//        box.setBackground(GameTheme.BACKGROUND);
-//        box.setBorder(GameTheme.DEFAULT_BORDER);
-//        box.setPreferredSize(new Dimension(80, 70));
-//        box.setForeground(GameTheme.WHITE);
-//        box.setHorizontalAlignment(SwingConstants.CENTER);
-//        box.setVerticalAlignment(SwingConstants.CENTER);
-//        box.setFont(new Font("Arial", Font.BOLD, 24));
-
- */

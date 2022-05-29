@@ -1,5 +1,5 @@
 
-// import javax.swing.JOptionPane;
+import javax.swing.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
@@ -8,14 +8,17 @@ import java.io.FileReader;
 public class Game extends KeyAdapter {
 
     private final LetterBox[][] boxes;
+    private final JButton playBtn;
+
     private int rowPosition;
     private int colPosition;
     private boolean gameOver;
 
     private String targetWord;
 
-    public Game(LetterBox[][] boxes) {
+    public Game(LetterBox[][] boxes, JButton playBtn) {
         this.boxes = boxes;
+        this.playBtn = playBtn;
         this.rowPosition = 0;
         this.colPosition = 0;
         this.gameOver = false;
@@ -23,7 +26,7 @@ public class Game extends KeyAdapter {
         generateTargetWord();
     }
 
-    public void generateTargetWord() {
+    private void generateTargetWord() {
         // generates random number which will represent the line that this games target word is on in targetWords.txt
         int randomLineNumber = (int) (Math.random() * 2315) + 1;
 
@@ -53,31 +56,43 @@ public class Game extends KeyAdapter {
     public void keyPressed(KeyEvent e) {
         if (gameOver) return;
 
-        if (e.getKeyCode() == 10 && colPosition == 5) { // enter key
-            String guessedWord = "";
+        if (e.getKeyCode() == 10) { // enter key
+            if (colPosition != 5) {
+                sendAlert("Invalid guess: not enough letters.");
+            } else {
+                String guessedWord = "";
 
-            // takes letter from each box in current row and puts together the guessed word
-            for (int i = 0; i < 5; i++) {
-                guessedWord += boxes[rowPosition][i].getLetter().toLowerCase(); // TODO: string builder / append?
-            }
-
-            // System.out.println(guessedWord);
-
-            if (checkIfValidGuess(guessedWord)) { // TODO: write comments
-                highlightLetters(guessedWord);
-
-                if (guessedWord.equals(targetWord)) {
-                    gameOver = true;
-                    reset();
-                } else { // ? remove else
-                    rowPosition++;
-                    colPosition = 0;
+                // takes letter from each box in current row and puts together the guessed word
+                for (int i = 0; i < 5; i++) {
+                    guessedWord += boxes[rowPosition][i].getLetter().toLowerCase(); // TODO: string builder / append?
                 }
 
-                // System.out.println("VALID GUESS");
-            } else {
-                // JOptionPane.showMessageDialog(null, "INVALID GUESS"); // to use uncomment JOptionPane import
-                System.out.println("NOT A VALID GUESS");
+                // System.out.println(guessedWord);
+
+                if (checkIfValidGuess(guessedWord)) { // TODO: write comments
+                    highlightLetters(guessedWord);
+
+                    if (guessedWord.equals(targetWord)) {
+                        gameOver = true;
+
+                        saveToLocalStorage(rowPosition);
+
+                        playBtn.setText("NEW GAME");
+                        sendAlert("You win!");
+                    } else if (rowPosition == 5) {
+                        gameOver = true;
+
+                        saveToLocalStorage(-1);
+
+                        playBtn.setText("NEW GAME");
+                        sendAlert("You lost. Hit the \"NEW GAME\" button to play again!");
+                    } else { // ? remove else
+                        rowPosition++;
+                        colPosition = 0;
+                    }
+                } else {
+                    sendAlert("Invalid guess: not in word list.");
+                }
             }
         } else if (e.getKeyCode() == 8 && colPosition > 0) { // delete key
             boxes[rowPosition][colPosition - 1].setLetter("");
@@ -92,7 +107,11 @@ public class Game extends KeyAdapter {
         }
     }
 
-    public void highlightLetters(String guessedWord) {
+    private static void sendAlert(String message) {
+        JOptionPane.showMessageDialog(null, message);
+    }
+
+    private void highlightLetters(String guessedWord) {
         // creates array versions of target word and guessed word by splitting the string by each character
         String[] targetWordArr = targetWord.split("");
         String[] guessedWordArr = guessedWord.split("");
@@ -120,7 +139,7 @@ public class Game extends KeyAdapter {
         }
     }
 
-    public boolean checkIfValidGuess(String guessedWord) {
+    private boolean checkIfValidGuess(String guessedWord) {
         try {
             // instantiates new buffered reader to read from dictionary.txt - a database with all valid five-letter words
             BufferedReader reader = new BufferedReader(new FileReader("dictionary.txt"));
@@ -147,16 +166,13 @@ public class Game extends KeyAdapter {
     }
 
     public void reset() {
-        try {
-            Thread.sleep(1500);
-        } catch (InterruptedException ex) {
-        }
-
         for (int r = 0; r < 6; r++) {
             for (int c = 0; c < 5; c++) {
                 boxes[r][c].setDefaultStyles();
             }
         }
+
+        playBtn.setText("RESET");
 
         generateTargetWord();
 
@@ -165,6 +181,18 @@ public class Game extends KeyAdapter {
 
         gameOver = false;
     }
+
+    private void saveToLocalStorage(int score) {
+        String pointsFromLocalStorage = LocalStorage.getItem(Integer.toString(score));
+
+        if (pointsFromLocalStorage != null) {
+            int points = Integer.parseInt(pointsFromLocalStorage);
+            LocalStorage.setItem(Integer.toString(score), Integer.toString(points + 1));
+        } else {
+            LocalStorage.setItem(Integer.toString(score), Integer.toString(1));
+        }
+    }
+
 }
 
 // a = 65
