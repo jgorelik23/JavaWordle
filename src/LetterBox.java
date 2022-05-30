@@ -3,6 +3,14 @@ import javax.swing.*;
 import java.awt.*;
 
 public class LetterBox {
+
+    /*
+
+    About LetterBox:
+    An instance of this class represents one letter box, which is the box that you type in to when you hit a key.
+
+     */
+
     private String letter;
     private LetterStatus status;
     private final JLabel box;
@@ -68,10 +76,5 @@ public class LetterBox {
 
     public JLabel getBox() {
         return this.box;
-    }
-
-    @Override
-    public String toString() { // TODO: ? del
-        return "Letter: " + this.letter;
     }
 }

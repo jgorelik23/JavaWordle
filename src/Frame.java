@@ -4,6 +4,13 @@ import java.awt.*;
 
 public class Frame extends JFrame {
 
+    /*
+
+    About Frame:
+    This class is the main class that contains the main JFrame and all the elements within it.
+
+     */
+
     private LetterBox[][] boxes;
     private final JPanel grid;
 
@@ -15,54 +22,55 @@ public class Frame extends JFrame {
         // creates all containers
         Container mainContainer = getContentPane();
         JPanel gridContainer = new JPanel();
-        JPanel optionsContainer = new JPanel();
+        JPanel buttonsContainer = new JPanel();
 
         // sets size of main frame
         setSize(WIDTH, 900);
 
         // sets background size and background colors of all containers
-        gridContainer.setBackground(GameTheme.BACKGROUND); // TODO: add message label inside of gridContainer below grid JPanel
+        gridContainer.setBackground(GameTheme.BACKGROUND);
+        buttonsContainer.setBackground(GameTheme.BACKGROUND);
+        buttonsContainer.setPreferredSize(new Dimension(WIDTH, 100));
 
-        optionsContainer.setBackground(GameTheme.BACKGROUND);
-        optionsContainer.setPreferredSize(new Dimension(WIDTH, 100));
-
-        // creates grid with boxes for letter
+        // creates and styles grid with boxes for letter
         grid = new JPanel();
         grid.setLayout(new GridLayout(6, 5, 5, 5));
-
         grid.setPreferredSize(new Dimension(WIDTH - 150, 400));
-        // grid.setMaximumSize(new Dimension(WIDTH - 150, 400)); // !!! ? del
-
         grid.setBackground(GameTheme.BACKGROUND);
+
+        // adds letter boxes to grid
         createBoxes();
 
+        // creates new game/reset button and statsBtn
         JButton playBtn = createButton("RESET");
-        JButton scoresBtn = createButton("STATS");
+        JButton statsBtn = createButton("STATS");
 
         Game game = new Game(boxes, playBtn);
-        // Scores scores = new Scores();
 
         // attaches action listener to play button that will call reset method in Game class
         playBtn.addActionListener(e -> game.reset());
-        scoresBtn.addActionListener(e -> new Stats());
+
+        // attaches action listener to stats button that will create an instance of the Stats class
+        statsBtn.addActionListener(e -> new Stats());
 
         // listens for presses in the JFrame, with the Game class implementing the method for the keypress event
         addKeyListener(game);
 
         // lays out all containers and their sub-containers
-        // title label at top, grid container at center, options container at bottom
+        // title label at top, grid container at center, buttons container at bottom
         mainContainer.setLayout(new BorderLayout());
         mainContainer.add(createTitle("WORDLE", 36), BorderLayout.NORTH);
         mainContainer.add(gridContainer, BorderLayout.CENTER);
-        mainContainer.add(optionsContainer, BorderLayout.SOUTH);
+        mainContainer.add(buttonsContainer, BorderLayout.SOUTH);
         gridContainer.add(grid);
-        // optionsContainer.add(Box.createRigidArea(new Dimension(0, 15)));
-        optionsContainer.add(playBtn);
-        optionsContainer.add(scoresBtn);
+
+        // adds buttons to button container
+        buttonsContainer.add(playBtn);
+        buttonsContainer.add(statsBtn);
 
         // boilerplate frame configuration
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setResizable(false); // TODO: set to true and set min screen height/width
+        setResizable(false);
         setLocationRelativeTo(null);
         pack();
         setVisible(true);
@@ -89,8 +97,10 @@ public class Frame extends JFrame {
     }
 
     public static JButton createButton(String btnText) {
+        // creates new JButton
         JButton btn = new JButton(btnText);
 
+        // styles button
         btn.setOpaque(true);
         btn.setForeground(GameTheme.WHITE);
         btn.setBackground(GameTheme.LIGHT_GREY);
@@ -119,3 +129,7 @@ public class Frame extends JFrame {
         new Frame();
     }
 }
+
+/*
+    optionsContainer.add(Box.createRigidArea(new Dimension(0, 15)));
+ */
