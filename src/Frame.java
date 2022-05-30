@@ -129,7 +129,3 @@ public class Frame extends JFrame {
         new Frame();
     }
 }
-
-/*
-    optionsContainer.add(Box.createRigidArea(new Dimension(0, 15)));
- */
