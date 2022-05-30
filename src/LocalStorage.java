@@ -28,6 +28,7 @@ public class LocalStorage {
 
             // separates key and value by three colons
             writer.write(key + ":::" + value);
+
             writer.close();
         } catch (IOException ioe) {
             System.out.println(ioe.getMessage());
@@ -39,12 +40,15 @@ public class LocalStorage {
 
         try {
             Scanner reader = new Scanner(new File(storageFile));
+
             while (reader.hasNextLine()) { // looks for key
                 line = reader.nextLine();
                 if (line.split(":::")[0].equals(key)) { // splits line by three colons, breaks loop if key found
                     break;
                 }
             }
+
+            reader.close();
         } catch (IOException ioe) {
             System.out.println(ioe.getMessage());
         }
@@ -87,6 +91,8 @@ public class LocalStorage {
 
             // overwrites entire file with empty string
             writer.write("");
+
+            writer.close();
         } catch (IOException ioe) {
             System.out.println(ioe.getMessage());
         }

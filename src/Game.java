@@ -77,8 +77,6 @@ public class Game extends KeyAdapter {
                     guessedWord += boxes[rowPosition][i].getLetter().toLowerCase();
                 }
 
-                // System.out.println(guessedWord);
-
                 if (checkIfValidGuess(guessedWord)) { // if the guess is the real word, the following code will execute
                     highlightLetters(guessedWord); // highlights letter boxes - more explanation in method
 

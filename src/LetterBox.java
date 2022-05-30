@@ -26,7 +26,7 @@ public class LetterBox {
         box.setPreferredSize(new Dimension(80, 70));
         box.setMaximumSize(new Dimension(80, 70));
         box.setHorizontalAlignment(SwingConstants.CENTER);
-        box.setVerticalAlignment(SwingConstants.CENTER);
+        box.setVerticalAlignment(JLabel.CENTER);
         box.setFont(new Font("Arial", Font.BOLD, 24));
         setDefaultStyles();
     }
