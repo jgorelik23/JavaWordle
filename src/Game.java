@@ -64,10 +64,13 @@ public class Game extends KeyAdapter {
 
     // handles key presses
     public void keyPressed(KeyEvent e) {
-        if (gameOver) return;
+        // prevents method from running if the game is over, except if the enter key being hit which allows the game to be reset
+        if (gameOver && e.getKeyCode() != 10) return;
 
         if (e.getKeyCode() == 10) { // enter key
-            if (colPosition != 5) { // if not enough letters in word, it will not allow guess submission
+            if (gameOver) { // resets game if game is over (alternative to pressing new game button)
+                reset();
+            } else if (colPosition != 5) { // if not enough letters in word, it will not allow guess submission
                 sendAlert("Invalid guess: not enough letters.");
             } else {
                 String guessedWord = "";
