@@ -17,6 +17,8 @@ public class Stats extends JFrame {
     private final JButton clearBtn;
 
     public Stats() {
+        setTitle("STATS");
+
         // creates main frame and styles it
         Container mainContainer = getContentPane();
         mainContainer.setBackground(GameTheme.BACKGROUND);
@@ -99,17 +101,20 @@ public class Stats extends JFrame {
 
     // formats the name of each stat label
     private String getStatsLabelText(int index, String score) {
+        String labelText;
+
         switch (index) {
-            case -1 -> { // -1 represents a fail
-                return "Fails: " + score;
-            }
-            case 0 -> { // 0 represents that the game was won in one guess
-                return (index + 1) + " guess: " + score;
-            }
-            default -> { // if not a fail or won in one guess, the default case gets executed
-                return (index + 1) + " guesses: " + score;
-            }
+            // -1 represents a fail
+            case -1 -> labelText = "Fails: " + score;
+
+            // 0 represents that the game was won in one guess
+            case 0 -> labelText = (index + 1) + " guess: " + score;
+
+            // if not a fail or won in one guess, the default case gets executed
+            default -> labelText = (index + 1) + " guesses: " + score;
         }
+
+        return labelText;
     }
 
 }
