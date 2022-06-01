@@ -72,6 +72,22 @@ public class LetterBox {
                 getBox().setBorder(GameTheme.DEFAULT_BORDER);
             }
         }
+
+        // uncomment the following code and replace switch statement above to get BlueJ support
+//        switch (getStatus()) {
+//            case correct:
+//                getBox().setBackground(GameTheme.CORRECT_GREEN);
+//                getBox().setBorder(GameTheme.GREEN_BORDER);
+//                break;
+//            case present:
+//                getBox().setBackground(GameTheme.PRESENT_YELLOW);
+//                getBox().setBorder(GameTheme.YELLOW_BORDER);
+//                break;
+//            case absent:
+//                getBox().setBackground(GameTheme.ABSENT_GREY);
+//                getBox().setBorder(GameTheme.DEFAULT_BORDER);
+//                break;
+//        }
     }
 
     public JLabel getBox() {

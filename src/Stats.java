@@ -114,6 +114,18 @@ public class Stats extends JFrame {
             default -> labelText = (index + 1) + " guesses: " + score;
         }
 
+        // uncomment the following code and replace switch statement above to get BlueJ support
+//        switch (index) {
+//            case -1: // -1 represents a fail
+//                labelText = "Fails: " + score;
+//                break;
+//            case 0: // 0 represents that the game was won in one guess
+//                labelText = (index + 1) + " guess: " + score;
+//                break;
+//            default: // if not a fail or won in one guess, the default case gets executed
+//                labelText = (index + 1) + " guesses: " + score;
+//        }
+
         return labelText;
     }
 
